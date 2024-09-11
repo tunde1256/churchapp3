@@ -17,17 +17,7 @@ const userSchema = new mongoose.Schema({
     churchBranch: { type: String },  // New field for church branch
     country: { type: String }        // New field for country
 });
-userSchema.methods.validatePassword = function (password) {
-    return bcrypt.compareSync(password, this.password);
-};
 
-// Middleware to hash password before saving
-userSchema.pre('save', async function (next) {
-    if (this.isModified('password') || this.isNew) {
-        this.password = await bcrypt.hash(this.password, 10);
-    }
-    next();
-});
 
 const User = mongoose.model('User', userSchema);
 
