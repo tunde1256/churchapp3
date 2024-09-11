@@ -5,8 +5,8 @@ const { authenticateToken } = require('../middleware/jwt');
 const { verifyAdmin } = require('../middleware/verifyAdmin');
 
 router.post('/attendance',attendanceController.addAttendance);
-router.get('/attendance/reports',authenticateToken,verifyAdmin, attendanceController.getAttendance);
-router.get('/attendance/range', authenticateToken,verifyAdmin, attendanceController.getAttendanceByDateRange);
+router.get('/attendance/reports', attendanceController.getAttendance);
+router.get('/attendance/range',  attendanceController.getAttendanceByDateRange);
 router.get('/attendance/branch', attendanceController.getAttendanceByBranchName);
 /**
 * @swagger

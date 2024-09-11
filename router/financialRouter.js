@@ -5,12 +5,12 @@ const { authenticateToken } = require('../middleware/jwt');
 const { verifyAdmin } = require('../middleware/verifyAdmin');
 
 router.post('/financial/add', financialController.addFinancialRecord);
-router.get('/financial/getAll',authenticateToken,verifyAdmin, financialController.getFinancialReport);
-router.put('/financial/:id',authenticateToken,verifyAdmin,  financialController.updateFinancialRecord);
-router.delete('/financial/:id', authenticateToken,verifyAdmin, financialController.deleteFinancialRecord);
-router.get('/financial/branch', authenticateToken,verifyAdmin, financialController.getFinancialByBranch);
-router.get('/financial/date-range',authenticateToken,verifyAdmin, financialController.getFinancialByDate);
-router.get('/financial/type',authenticateToken,verifyAdmin,financialController.getFinancialByType);
+router.get('/financial/getAll', financialController.getFinancialReport);
+router.put('/financial/:id',  financialController.updateFinancialRecord);
+router.delete('/financial/:id',  financialController.deleteFinancialRecord);
+router.get('/financial/branch', financialController.getFinancialByBranch);
+router.get('/financial/date-range', financialController.getFinancialByDate);
+router.get('/financial/type',financialController.getFinancialByType);
 /**
  * @swagger
  * tags:

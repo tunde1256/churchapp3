@@ -6,17 +6,17 @@ const { authenticateToken } = require('../middleware/jwt');
 const upload = require('../middleware/multer');
 
 
-router.get('/events/location', authenticateToken, eventController.getEventsByLocation);
+router.get('/events/location',  eventController.getEventsByLocation);
 router.post('/events', upload.single('image'), eventController.addEvent);
 router.put('/events/:id', upload.single('image'), eventController.updateEvent);
 
-router.get('/event/:id', authenticateToken,verifyAdmin, eventController.getEventById);
-router.get('/events/getAll', authenticateToken, eventController.getEvents);
-router.delete('/event/:id', authenticateToken,verifyAdmin, eventController.deleteEvent);
-router.get('/events/date-range', authenticateToken, eventController.getEventsByDateRange);
-router.get('/events/organizer', authenticateToken, eventController.getEventsByOrganizer);
-router.get('/events/location', authenticateToken, eventController.getEventsByLocation);
-router.get('/events/branch', authenticateToken, eventController.getEventByBranch);
+router.get('/event/:id',  eventController.getEventById);
+router.get('/events/getAll',  eventController.getEvents);
+router.delete('/event/:id',  eventController.deleteEvent);
+router.get('/events/date-range',  eventController.getEventsByDateRange);
+router.get('/events/organizer',  eventController.getEventsByOrganizer);
+router.get('/events/location',  eventController.getEventsByLocation);
+router.get('/events/branch',  eventController.getEventByBranch);
 
 /**
  * @swagger

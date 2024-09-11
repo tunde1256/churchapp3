@@ -6,11 +6,11 @@ const { authenticateToken } = require('../middleware/jwt');
 const authenticateAdmin = require('../middleware/jwt');
 
 // Correct the order of middleware in the routes
-router.get('/getAll', authenticateToken, branchController.getBranches);
-router.get('/:id', authenticateToken, branchController.getBranchById);
-router.post('/', authenticateToken, verifyAdmin, branchController.addBranch); // authenticateToken first
-router.put('/:id',authenticateToken ,verifyAdmin,branchController.updateBranch); // authenticateToken first
-router.delete('/:id', authenticateToken, verifyAdmin, branchController.deleteBranch); // authenticateToken first
+router.get('/getAll',  branchController.getBranches);
+router.get('/:id', branchController.getBranchById);
+router.post('/', branchController.addBranch); // authenticateToken first
+router.put('/:id',branchController.updateBranch); // authenticateToken first
+router.delete('/:id',  branchController.deleteBranch); // authenticateToken first
 
 
 /**
@@ -89,7 +89,7 @@ router.delete('/:id', authenticateToken, verifyAdmin, branchController.deleteBra
  *       500:
  *         description: Server error
  */
-router.get('/getAll', authenticateToken, branchController.getBranches);
+router.get('/getAll', branchController.getBranches);
 
 /**
  * @swagger
@@ -139,7 +139,7 @@ router.get('/getAll', authenticateToken, branchController.getBranches);
  *       500:
  *         description: Server error
  */
-router.get('/:id', authenticateToken, branchController.getBranchById);
+router.get('/:id', branchController.getBranchById);
 
 /**
  * @swagger
@@ -216,7 +216,7 @@ router.get('/:id', authenticateToken, branchController.getBranchById);
  *       500:
  *         description: Server error
  */
-router.post('/', authenticateToken, verifyAdmin, branchController.addBranch);
+router.post('/', branchController.addBranch);
 
 /**
  * @swagger
@@ -297,7 +297,7 @@ router.post('/', authenticateToken, verifyAdmin, branchController.addBranch);
  *       500:
  *         description: Server error
  */
-router.put('/:id', authenticateToken, verifyAdmin, branchController.updateBranch);
+router.put('/:id', branchController.updateBranch);
 
 /**
  * @swagger
@@ -330,7 +330,7 @@ router.put('/:id', authenticateToken, verifyAdmin, branchController.updateBranch
  *       500:
  *         description: Server error
  */
-router.delete('/:id', authenticateToken, verifyAdmin, branchController.deleteBranch);
+router.delete('/:id', branchController.deleteBranch);
 
 
 

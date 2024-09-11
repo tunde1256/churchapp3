@@ -7,10 +7,10 @@ const authenticateUser = require('../middleware/authenticateUser');
 
 const router = express.Router();
 
-router.post('/notifications', authenticateAdmin, authenticateToken, verifyAdmin, notificationController.sendNotification);
-router.get('/notifications/getAll', authenticateToken, authenticateAdmin, verifyAdmin, notificationController.getNotifications);
-router.delete('/notifications/:id', authenticateToken, notificationController.deleteNotification);
-router.post('/notifications/:id/markasRead', authenticateToken, authenticateAdmin, verifyAdmin, notificationController.markNotification);
+router.post('/notifications',  notificationController.sendNotification);
+router.get('/notifications/getAll',  notificationController.getNotifications);
+router.delete('/notifications/:id',  notificationController.deleteNotification);
+router.post('/notifications/:id/markasRead',  notificationController.markNotification);
 
 /**
  * @swagger
