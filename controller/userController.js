@@ -43,42 +43,40 @@ exports.registerUser = async (req, res) => {
     }
 };
 
+
 // Login user
+
+
+
 exports.loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            logger.warn('Validation failed: missing email or password');
             return res.status(400).json({ message: 'Email and password are required' });
         }
 
-        // Find user by email
         const user = await User.findOne({ email });
 
         if (!user) {
-            logger.warn('Invalid email or password:', { email });
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Compare the provided password with the stored hashed password
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            logger.warn('Invalid email or password:', { email });
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Generate JWT token upon successful authentication
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-        logger.info('User logged in successfully', { userId: user._id, email: user.email });
         res.json({ token });
     } catch (error) {
-        logger.error('Error logging in user:', error);
         res.status(500).json({ message: 'Server error while logging in user' });
     }
 };
+
+
+
 // Update existing user
 exports.updateUser = async (req, res) => {
     try {
@@ -193,3 +191,75 @@ exports.getUsers = async (req, res) => {
         res.status(500).json({ message: e.message });
     }
 };
+// Reset Password Controller
+exports.resetPassword = async (req, res) => {
+    try {
+        const { email, newPassword, confirmPassword } = req.body;
+
+        if (!email || !newPassword || !confirmPassword) {
+            return res.status(400).json({ message: 'Email, new password, and confirm password are required' });
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ message: 'Passwords do not match' });
+        }
+
+        // Find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Hash the new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // Update user's password
+        user.password = hashedPassword;
+        await user.save();
+
+        logger.info('Password reset successfully', { userId: user._id });
+        return res.status(200).json({ message: 'Password reset successfully' });
+
+    } catch (error) {
+        logger.error('Error during password reset:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+exports.forgotPassword = async (req, res) => {
+    try {
+        const { email, newPassword, confirmPassword } = req.body;
+
+        // Validate input
+        if (!email || !newPassword || !confirmPassword) {
+            return res.status(400).json({ message: 'Email, new password, and confirm password are required' });
+        }
+
+        // Check if passwords match
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ message: 'Passwords do not match' });
+        }
+
+        // Find user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User with this email does not exist' });
+        }
+
+        // Hash new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // Update the user's password
+        user.password = hashedPassword;
+        await user.save();
+
+        logger.info('Password reset successfully for user', { userId: user._id });
+        return res.status(200).json({ message: 'Password has been reset successfully' });
+
+    } catch (error) {
+        logger.error('Error during password reset', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+

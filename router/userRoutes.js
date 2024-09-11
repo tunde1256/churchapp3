@@ -5,12 +5,14 @@ const { authenticateToken } = require('../middleware/jwt');
 const { verifyAdmin } = require('../middleware/verifyAdmin');
 
 // Route definitions
-router.post('/register',  userController.registerUser);
+router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
 router.get('/getall', userController.getUsers);
-router.get('/:id',  userController.getUserById);
-router.put('/update/:id',  userController.updateUser);
-router.delete('/:id',  userController.deleteUser); // Verify admin before deletion
+router.get('/:id', userController.getUserById);
+router.put('/update/:id', userController.updateUser);
+router.delete('/:id', userController.deleteUser); // Verify admin before deletion
+router.post('/reset-password', userController.resetPassword)
+router.post('/forgot-password', userController.forgotPassword);
 
 /**
  * @swagger
@@ -101,7 +103,7 @@ router.delete('/:id',  userController.deleteUser); // Verify admin before deleti
  *       500:
  *         description: Server error
  */
-router.post('/register', userController.registerUser);
+router.post('/register', authenticateToken, userController.registerUser);
 
 /**
  * @swagger
@@ -196,7 +198,7 @@ router.post('/login', userController.loginUser);
  *       500:
  *         description: Server error
  */
-router.get('/getall', userController.getUsers);
+router.get('/getall', authenticateToken, verifyAdmin, userController.getUsers);
 
 /**
  * @swagger
@@ -225,7 +227,7 @@ router.get('/getall', userController.getUsers);
  *       500:
  *         description: Server error
  */
-router.get('/:id', userController.getUserById);
+router.get('/:id', authenticateToken, userController.getUserById);
 
 /**
  * @swagger
@@ -270,7 +272,7 @@ router.get('/:id', userController.getUserById);
  *       500:
  *         description: Server error
  */
-router.put('/update/:id', userController.updateUser);
+router.put('/update/:id', verifyAdmin, userController.updateUser);
 
 /**
  * @swagger
@@ -309,6 +311,7 @@ router.put('/update/:id', userController.updateUser);
  *       500:
  *         description: Server error
  */
-router.delete('/:id', userController.deleteUser);
+router.delete('/:id', verifyAdmin, userController.deleteUser);
 
 module.exports = router;
+

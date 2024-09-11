@@ -5,13 +5,13 @@ const { validateLogin, validateRegister, handleValidationErrors } = require('../
 const { generateToken, authenticateToken } = require('../middleware/jwt'); // Import your JWT middleware if needed
 
 // Admin routes
-router.post('/register',adminController.RegisterAdmin);
-router.post('/login',  adminController.login);
+router.post('/register', adminController.RegisterAdmin);
+router.post('/login', adminController.login);
 router.delete('/:id', adminController.deleteAdmin); // Authorization added
-router.get('/:id',  adminController.getAdminById); // Authorization added
-router.get('/',  adminController.getAdmins); // Authorization added
+router.get('/:id', adminController.getAdminById); // Authorization added
+router.get('/', adminController.getAdmins); // Authorization added
 router.put('/update/:id', adminController.updateAdmin);
-
+router.post('/reset-password', adminController.resetPassword);
 
 /**
  * @swagger
@@ -305,3 +305,4 @@ router.put('/update/:id', adminController.updateAdmin);
  */
 
 module.exports = router;
+
