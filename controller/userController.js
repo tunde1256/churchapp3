@@ -53,13 +53,23 @@ exports.loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Email and password are required' });
         }
 
+        // Find user by email
         const user = await User.findOne({ email });
 
-        if (!user || !user.validatePassword(password)) { // Adjust this method as per your model
+        if (!user) {
             logger.warn('Invalid email or password:', { email });
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
+        // Compare the provided password with the stored hashed password
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            logger.warn('Invalid email or password:', { email });
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Generate JWT token upon successful authentication
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         logger.info('User logged in successfully', { userId: user._id, email: user.email });
@@ -69,7 +79,6 @@ exports.loginUser = async (req, res) => {
         res.status(500).json({ message: 'Server error while logging in user' });
     }
 };
-
 // Update existing user
 exports.updateUser = async (req, res) => {
     try {
